@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bank SI</title>
+<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"/>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+<body ng-app="Bank" ng-controller="BankController">
+		<div class="container col-md-12">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="card text-white bg-dark">
+						<div class="card-header text-center">Account</div>
+						<div class="card-body">
+							<form>
+								<div class="form-group col-md-12">
+									<label class="col-md-2"> Code:</label>
+									<input type="text" class="col-md-6"  placeholder="Enter your Code" ng-model="codeCompte"/>
+									<button class="btn btn-warning col-md-3 " ng-click="chargerCompte()">Load Account</button>
+								</div>
+					    	</form>	
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6" ng-if="compte">
+					<div class="card text-white  bg-dark col-md-12">
+						<div class="card-header text-center col-md-12">Account Informations</div>
+						<div class="card-body col-md-12">
+								<label class="col-md-4" >Type  : </label>
+								<label class="col-md-6">{{compte.type}} </label>
+								<label class="col-md-4" >Created at  : </label>
+								<label class="col-md-6">{{compte.dateCreation|date:'yyyy-MM-dd HH:mm:ss'}} </label>
+								<label class="col-md-4" >Balance : </label>
+								<label class="col-md-6 ">{{compte.solde}} DH</label>
+							<div ng-if="compte.decouvert">
+								<label class="col-md-4" >Discovered : </label>
+								<label class="col-md-6 ">{{compte.decouvert}} DH</label>
+							</div>
+							<div ng-if="compte.taux">
+								<label class="col-md-4" >Rate : </label>
+								<label class="col-md-6 ">{{compte.taux}} DH</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top : 1%" ng-if="compte">
+				<div class="col-md-6">
+					<div class="card text-white bg-dark">
+						<div class="card-header text-center">Operations</div>
+						<div class="card-body">
+							<form>
+								<div class="form-group col-md-12">
+									<label class="col-md-3"> Payment:</label>
+									<input type="radio" ng-model="operation.type" value="versement"/>
+									<label class="col-md-3"> Withdrawal:</label>
+									<input type="radio" ng-model="operation.type" value="retrait"/>
+									<label class="col-md-3"> Transfer:</label>
+									<input type="radio" ng-model="operation.type" value="virement"/>
+								</div>
+								<div class="form-group col-md-12">
+									<label class="col-md-4"> Amount:</label>
+									<input type="text" class="col-md-7"  placeholder="Enter your Amount" ng-model="operation.montant"/>
+									<div ng-if="operation.type == 'virement'">
+									<label class="col-md-4"> To Account:</label>
+									<input type="text"  class="col-md-7"  placeholder="Enter Code of the account" ng-model="operation.code2"/>
+									</div>
+									<button class="btn btn-warning col-md-3  offset-md-9" ng-click="process()">Go</button>
+								</div>
+					    	</form>	
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6" ng-if="compte">
+					<div class="card text-white  bg-dark col-md-12">
+						<div class="card-header text-center col-md-12">History</div>
+						<div class="card-body col-md-12">
+							<table class="table table-striped table-dark">
+  								<thead>
+    								<tr>
+      									<th>Number</th>
+      									<th>Date</th>
+      									<th>Amount</th>
+      									<th>Type</th>
+    								</tr>
+  								</thead>
+  								<tbody>
+    								<tr ng-repeat="operation in pageOperations.operations">
+      									<th scope="row">{{operation.numeroOperation}}</th>
+      									<td>{{operation.dateOperation|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+      									<td>{{operation.montant}}</td>
+      									<td>{{operation.type}}</td>
+    								</tr>
+ 								</tbody>
+							</table>
+							<nav aria-label="Page navigation" style="color:#007bff;">
+  								<ul class="pagination justify-content-center pagination-sm">
+   									 <li class="page-item" ng-if="pageCourante !== 0">
+   									 	<a class="page-link" ng-click="goToPage(pageCourante -1)">Previous</a>
+   									 </li>
+    								<li class="page-item"  ng-class="{active : $index == pageCourante}" ng-repeat="p in pages track by $index">
+    								<a class="page-link" ng-click="goToPage($index)">{{$index}}</a></li>
+								    <li class="page-item" ng-if="pageCourante !== nombrePages -1 "><a class="page-link"  ng-click="goToPage(pageCourante + 1)">Next</a></li>
+  								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<script type="text/javascript" src="angular/angular.min.js" ></script>
+<script type="text/javascript" src="js/app.js" ></script>
+</body>
+</html>

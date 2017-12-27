@@ -1,0 +1,8 @@
+.container{
+margin-top:25px;
+position:absolute;
+height:220px;
+}
+.pagination li.page-item {
+	cursor: pointer;
+}
